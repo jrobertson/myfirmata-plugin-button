@@ -25,20 +25,32 @@ class MyFirmataPluginButton
     topic = @variables[:device_id]
     msg = @settings[:msg] || 'button pressed'
     pinx = @settings[:pin] || 2
-    interval = @settings[:interval] || 1
+    triggers = @settings[:event_triggers] || @settings[:trigger_events] || 1
 
-    @arduino.on :digital_read do |pin, high|
+    interval = if triggers == 1 then
+      @settings[:interval] || 1
+    else
+      @settings[:interval] || 0.1
+    end
 
-      if pin == pinx and high and t + interval < Time.now
-        notifier.notice "%s: %s" % [topic, msg]
+    @arduino.on :digital_read do |pin, pressed|
+      
+      if pin == pinx and t + interval < Time.now then
+        
+        if triggers == 1 then
+          notifier.notice "%s: %s" % [topic, msg] if pressed
+        else
+          state = pressed ? 'down' : 'up'
+          notifier.notice "%s: button %s" % [topic, state]
+        end
+        
         t = Time.now
+        
       end
-
     end
 
   end  
   
   alias on_start start
-  
-  
+    
 end
