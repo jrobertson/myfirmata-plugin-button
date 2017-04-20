@@ -32,6 +32,8 @@ class MyFirmataPluginButton
     else
       @settings[:interval] || 0.1
     end
+    
+    old_state, state = 'up', ''
 
     @arduino.on :digital_read do |pin, pressed|
       
@@ -40,8 +42,12 @@ class MyFirmataPluginButton
         if triggers == 1 then
           notifier.notice "%s: %s" % [topic, msg] if pressed
         else
-          state = pressed ? 'down' : 'up'
+          
+          state = pressed ? 'down' : 'up'          
+          next if state == old_state
+
           notifier.notice "%s: button %s" % [topic, state]
+          old_state = state
         end
         
         t = Time.now
