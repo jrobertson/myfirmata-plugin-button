@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'myfirmata-plugin-button'
-  s.version = '0.1.3'
+  s.version = '0.1.4'
   s.summary = 'A MyFirmata plugin which detects a button press and publishes a message to the SimplePubSub broker.'
   s.authors = ['James Robertson']
   s.files = Dir['lib/myfirmata-plugin-button.rb']

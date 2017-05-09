@@ -22,8 +22,8 @@ class MyFirmataPluginButton
     t = Time.now
     
     notifier = @variables[:notifier]
-    topic = @variables[:device_id]
-    msg = @settings[:msg] || 'button pressed'
+    topic = @variables[:device_id] + '/button'
+    msg = @settings[:msg] || 'pressed'
     pinx = @settings[:pin] || 2
     triggers = @settings[:event_triggers] || @settings[:trigger_events] || 1
 
@@ -46,7 +46,7 @@ class MyFirmataPluginButton
           state = pressed ? 'down' : 'up'          
           next if state == old_state
 
-          notifier.notice "%s: button %s" % [topic, state]
+          notifier.notice "%s: %s" % [topic, state]
           old_state = state
         end
         
